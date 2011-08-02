@@ -14,7 +14,7 @@ linux:
 	rm -rf libirecovery.o
 
 macosx:
-	gcc -o libirecovery.dylib -c src/libirecovery.c -dynamiclib
+	gcc -o libirecovery.dylib -c src/libirecovery.c -dynamiclib -I./include
 	gcc -o irecovery src/irecovery.c -I./include -L. -lirecovery -lreadline -lusb-1.0
 	
 windows:

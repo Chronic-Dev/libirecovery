@@ -405,7 +405,30 @@ int irecv_control_transfer( irecv_client_t client,
 							uint16_t wLength,
 							unsigned int timeout) {
 #ifndef WIN32
+#ifndef __APPLE__
 	return libusb_control_transfer(client->handle, bmRequestType, bRequest, wValue, wIndex, data, wLength, timeout);
+#else
+	if (timeout <= 10) {
+		// pod2g: dirty hack for limera1n support.
+		IOReturn kresult;
+		IOUSBDevRequest req;
+		bzero(&req, sizeof(req));
+		//struct darwin_device_handle_priv *priv = (struct darwin_device_handle_priv *)client->handle->os_priv;
+		struct darwin_device_priv *dpriv = (struct darwin_device_priv *)client->handle->dev->os_priv;
+		req.bmRequestType     = bmRequestType;
+		req.bRequest          = bRequest;
+		req.wValue            = OSSwapLittleToHostInt16 (wValue);
+		req.wIndex            = OSSwapLittleToHostInt16 (wIndex);
+		req.wLength           = OSSwapLittleToHostInt16 (wLength);
+		req.pData             = data + LIBUSB_CONTROL_SETUP_SIZE;
+		kresult = (*(dpriv->device))->DeviceRequestAsync(dpriv->device, &req, (IOAsyncCallback1) dummy_callback, NULL);
+		usleep(5 * 1000);
+		kresult = (*(dpriv->device))->USBDeviceAbortPipeZero (dpriv->device);
+		return kresult == KERN_SUCCESS ? 0 : -1;
+	} else {
+		return libusb_control_transfer(client->handle, bmRequestType, bRequest, wValue, wIndex, data, wLength, timeout);
+	}	
+#endif
 #else
 	DWORD count = 0;
 	DWORD ret;

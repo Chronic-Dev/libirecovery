@@ -1,9 +1,10 @@
+CC=gcc
 MACHINE := $(shell $(CC) -dumpmachine)
 
 ifeq ($(findstring darwin,$(MACHINE)), darwin)
-	CFLAGS = -I./include -I/usr/local/include -I/opt/local/include
+	CFLAGS = -m32 -I./include -I/usr/local/include -I/opt/local/include
 	LDFLAGS = -L/usr/lib -L/opt/local/lib 
-	LIBS = -lusb-1.0 -framework CoreFoundation -framework IOKit
+	LIBS = -m32 -lusb-1.0 -framework CoreFoundation -framework IOKit
 
 	IRECOVERY_TARGET = irecovery
 	IRECOVERY_LDFLAGS = $(LDFLAGS)
@@ -17,9 +18,9 @@ ifeq ($(findstring darwin,$(MACHINE)), darwin)
 endif
 
 ifeq ($(findstring linux,$(MACHINE)), linux)
-	CFLAGS = -fPIC -O3 -I./include -I/usr/include -I/usr/local/include
+	CFLAGS = -m32 -fPIC -O3 -I./include -I/usr/include -I/usr/local/include
 	LDFLAGS = -L/usr/lib -L/usr/local/lib
-	LIBS = -lusb-1.0
+	LIBS = -m32 -lusb-1.0
 	
 	IRECOVERY_TARGET = irecovery
 	IRECOVERY_LDFLAGS = $(LDFLAGS)

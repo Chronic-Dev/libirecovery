@@ -238,6 +238,15 @@ void irecv_hexdump(unsigned char* buf, unsigned int len, unsigned int addr);
 
 void irecv_init();
 void irecv_exit();
+int irecv_control_transfer(irecv_client_t client,
+				uint8_t bmRequestType,
+				uint8_t bRequest,
+				uint16_t wValue,
+				uint16_t wIndex,
+				unsigned char *data,
+				uint16_t wLength,
+				unsigned int timeout);
+
 irecv_client_t irecv_reconnect(irecv_client_t client, int initial_pause);
 irecv_error_t irecv_reset_counters(irecv_client_t client);
 irecv_error_t irecv_finish_transfer(irecv_client_t client);

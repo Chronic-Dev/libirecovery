@@ -82,7 +82,14 @@ $(IRECOVERY_TARGET): $(IRECOVERY_OBJECTS)
 
 install: all
 	cp $(LIBIRECOVERY_SHARED_TARGET) /usr/local/lib
-	cp $(IRECOVERY_TARGET) /usr/local/bin	
+	cp $(IRECOVERY_TARGET) /usr/local/bin
+	mkdir -p /usr/local/include/libirecovery
+	cp -R include/*.h /usr/local/include/libirecovery/
+
+uninstall:
+	rm /usr/local/lib/$(LIBIRECOVERY_SHARED_TARGET)
+	rm /usr/local/bin/$(IRECOVERY_TARGET)
+	rm -rf /usr/local/include/libirecovery
 		
 clean:
 	$(RM) $(LIBIRECOVERY_STATIC_TARGET) $(LIBIRECOVERY_SHARED_TARGET) $(IRECOVERY_TARGET) *.o 

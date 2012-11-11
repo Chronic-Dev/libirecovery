@@ -28,6 +28,9 @@
 #include <libusb-1.0/libusb.h>
 #define _FMT_qX "%qX"
 #define _FMT_016llx "%016llx"
+#ifdef __APPLE__
+#include <libusb-1.0/os/darwin_usb.h>
+#endif
 #else
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>

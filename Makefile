@@ -2,7 +2,7 @@ CC=gcc
 MACHINE := $(shell $(CC) -dumpmachine)
 
 ifeq ($(findstring darwin,$(MACHINE)), darwin)
-	CFLAGS = -m32 -I./include -I/usr/local/include -I/opt/local/include
+	CFLAGS = -m32 -I./include -I./include/libusb-1.0/  -I/usr/local/include -I/opt/local/include 
 	LDFLAGS = -L/usr/lib -L/opt/local/lib 
 	LIBS = -m32 -lusb-1.0 -framework CoreFoundation -framework IOKit
 
